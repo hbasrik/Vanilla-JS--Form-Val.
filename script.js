@@ -27,38 +27,42 @@ function isValidEmail(email) {
 
 }
 
+function checkRequired(inputArr){
+        inputArr.forEach(function(input){
+            if(input.value.trim()===''){
+                showError(input, `${getFieldName(input)} is required`);
+            }else{
+                showSuccess(input);
+            }
+        });
+}
+
+function checkLength(input,min,max){
+    if(input.value.length<min){
+        showError(input,`${getFieldName(input)} must be at least ${min} characters` );
+    }else if(input.value.length>max){
+        showError(input,`${getFieldName(input)} must be less than ${max} characters` );
+    }
+}
+
+function checkPassword(input1,input2){
+    if(input1.value!==input2.value){
+        showError(input2,'Passwords do not match');
+    }
+}
+
+function getFieldName(input){
+    return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+}
 
 form.addEventListener('submit',function(e){
 e.preventDefault();
     // console.log('submit');
     // console.log(username.value);
 
-    if(username.value==='' ){
-       showError(username, "Cannot be empty")
-    }else {
-        showSuccess(username);
-    }
-
-    if(email.value==='' ){
-        showError(email, "Cannot be empty")
-     }else if (!isValidEmail(email.value)){
-        showError(email,"Email is not valid")
-     }
-     
-     else {
-         showSuccess(email);
-     }
-
-     if(password.value==='' ){
-        showError(password, "Cannot be empty")
-     }else {
-         showSuccess(password);
-     }
-
-     if(password2.value==='' ){
-        showError(password2, "Cannot be empty")
-     }else {
-         showSuccess(password2);
-     }
+    checkRequired([username,email,password,password2]);
+    checkLength(username,6,15);
+    checkLength(password, 7,25)
+    checkPassword(password,password2);
 
 });
